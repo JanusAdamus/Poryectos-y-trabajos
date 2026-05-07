@@ -1,0 +1,10 @@
+Cuadratica: Hessiano libre PD porque sus autovalores son [ 99.583413 186.416587]
+Cuadratica en recta: z^T H z = 354.0
+
+Cuadratica
+libre GD      [-0.  0.] error = 2.6988324267725293e-13
+libre Newton  [0. 0.] error = 0.0
+recta Newton  [-0.576271 -0.423729] error = 0.0
+disco barrera [0.001711 0.000342] error = 0.001744891832407594
+correcciones Hessiano = 0 max shift = 0.0
+

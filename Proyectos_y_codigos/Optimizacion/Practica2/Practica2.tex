@@ -1,0 +1,333 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[main=spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{mathtools}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{appendix}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\geometry{margin=2.5cm}
+\onehalfspacing
+\title{Laboratorio 2: Lagrange y KKT}
+\author{Adrián Janus Gonzalez Adamuz}
+\date{\today}
+\lstset{
+  inputencoding=utf8,
+  extendedchars=true,
+  basicstyle=\ttfamily\small,
+  numbers=left,
+  numberstyle=\tiny,
+  frame=single,
+  breaklines=true,
+  showstringspaces=false,
+  tabsize=2,
+  literate=
+    {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'\i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+    {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+    {ñ}{{\~n}}1 {Ñ}{{\~N}}1
+  }	
+
+\begin{document}
+\maketitle
+
+\section{Lagrange}
+\subsection{Ejemplo 1}
+Consideramos el problema de maximizar $f(x,y) = 2x + 3y$ sujeta a la restricción $\sqrt{x} + \sqrt{y} = 5$ 
+\begin{itemize}
+\item Utiliza la computadora para graficar la función y la restricción. 
+\item Intenta usar los multiplicadores de Lagrange para resolver el problema. 
+\item Usa la gráfica de la parte (a) para intentar encontrar el punto maximizador deseado. 
+\item ¿Cuál es la significancia del punto $f(9,4)$?
+\item Explica por qué falla el método de los multiplicadores de Lagrange.
+
+\end{itemize}
+
+\subsubsection{Grafica y restricción}
+\begin{figure}[hbtp]
+\centering
+\includegraphics[scale=0.5]{../../Imágenes/Sin título.png}
+\caption{Grafica con restricción}
+\end{figure}
+De aqui se ve claramanete como el máximo de la función se encuentra en el (0,25) y hay otro candidato en el (25,0). 
+Evaluando en la función
+\[
+f(0,25) =2(0) + 3(25)=75 \quad f(25,0)=2(25) +3(0) = 50,
+\]
+
+\subsubsection{Desarollo Lagrange}
+Tenemos que $g(x,y) = \sqrt{x} + \sqrt{y} - 5$ como la restricción, ahora sacamos el gradiente de ambas fucniones:
+\[
+\nabla f(x,y) = \begin{pmatrix}
+2 & 3
+\end{pmatrix}
+\quad
+\nabla g(x,y) = \begin{pmatrix}
+\frac{1}{2\sqrt{x}}
+&
+\frac{1}{2\sqrt{y}}
+\end{pmatrix}
+\]
+Recordamos la condición de lagrange
+$\nabla f -\lambda \nabla g = 0$
+Entonces tenemos el sistema
+\[
+2 = \lambda \frac{1}{2\sqrt{x}}, \quad 3= \lambda \frac{1}{2 \sqrt{y}}
+\]
+despejando 
+\[
+\lambda = 4 \sqrt{x} \quad \lambda = 6 \sqrt{y}
+\]
+igualando las lambdas tenemos que
+\[
+\sqrt{x} = \frac{3}{2} \sqrt{y}
+\]
+Si sustituimos esta igualdad en la restriccion $g(x,y)$
+\[
+\frac{3}{2} \sqrt{y} + \sqrt{y} = 5 \Rightarrow \frac{5}{2} \sqrt{y} = 5 \Rightarrow \sqrt{y} = 2 \Rightarrow y = 4
+\]
+Entonces $\sqrt{x} = 3 \Rightarrow x=9$
+Por lo tanto el punto que nos da Lagrange es $(x,y) = (9,4)$
+Evalando en la función
+\[
+f(9,4) = 2(9) +3(4) = 18 + 12 = 30
+\]
+\subsubsection{Importancia de $f(9,4)$}
+El punto $(9,4)$ es significativo por dos razones:
+\begin{enumerate}
+\item Es factible porque satisface la restricción $\sqrt{9} + \sqrt{4} = 3+2 = 5$
+\item Es el punto crítico interior que produce el método de lagrange
+\end{enumerate}
+\subsubsection{¿Por qué falla Lagrange?}
+El problema no es que Lagrange no sirva, sino que no se cumplen las hipótesis necesarias.
+Lagrange solo sirve si
+\begin{enumerate}
+\item El punto óptimo sea interorior respecto a la frontera
+\item la restricción se diferenciable y $\nabla g \neq 0$ en el punto.
+\end{enumerate}
+\subsection{Ejemplo 2}
+Consideramos el problema de minimizar la función $f(x,y)= x$ en la curva $y^2 + x^4 - x^4 =0$ denominada curva piroforme
+\begin{enumerate}
+\item Utiliza la computadora para graficar la función y la restricción
+\item ntenta usar los multiplicadores de Lagrange para resolver el problema
+\item Muestra que el mínimo de la función es $f(0, 0) = 0$ pero la condición de Lagrange$\nabla f(0,0) = \lambda \nabla g(0,0)$ no se cumple para ningún valor de $\lambda$.
+\item Explica porque falla el método de Lagrange. 
+\end{enumerate}
+\subsubsection{Grafica}
+\begin{figure}[hbtp]
+\centering
+\includegraphics[scale=0.5]{../../Imágenes/grafica2.png}
+\caption{Curva piroforme}
+\end{figure}
+\subsection{Multiplicadores de Lagrange}
+\[
+\nabla f(x,y) = \lambda \nabla g(x,y) \Rightarrow \nabla f(x,y) = (1,0), \quad \nabla g(x,y) = (4x^3 - 3x^2, 2y)
+\]
+La condición de lagrange queda 
+\[
+(1,0) = \lambda (4x^3 - 3x^2, 2y)
+\]
+De la segunda ordenada vemos que que $2y\lambda = 0$ de manera rápida vemos que si $\lambda = 0$ lleva a que $0=1$ entonces si sustituimo $y=0$ en la restricción 
+\[
+0 + x^4 - x^3 = x^3(x-1) =0 \Rightarrow x=0 \quad o \quad x = 1
+\]
+Entonces los únicos puntos factibles son $y=0$ son $(0,0)$ y $(1,0)$
+Evaluamos en $\nabla g$ 
+\[
+\nabla g(1,0) =(1,0), \quad g(0,0) = (0,0)
+\]
+3.De manera gráfica y analítica el mínimo se encuentra en el (0,0) $f(0,0) = 0$
+pero $\nabla f(0,0) = (1,0)$ y $\nabla g(0,0) = (0,0)$ es decir tendriamos la condición de Lagrange siguiente
+$(1,0) = \lambda(0,0) !$ Por lo tanto
+\[
+\nexists \lambda : \nabla f(0,0) = \lambda \nabla g(0,0)
+\]
+\subsubsection{¿Por qué falla Lagrange?}
+Porque el método de multiplicadores de Lagrange requiere regularidad de la restricción en el punto óptimo: típicamente que 
+g sea diferenciable y que $\nabla g(x^*, y^*) \neq (0,0)$
+En $(0,0)$ ocurre exactamente lo opuesto $\nabla g(0,0) = (0,0)$ y geometricamente la curva tiene un "pico" en el $(0,0)$
+haciendola no diferenciable en ese punto.
+
+\section{KKT}
+\subsection{Ejemplo 1}
+Encontramos el máximo de $f(x,y) = 3x + 4y$ sujeto a las restricciones \[g_1(x,y) = x^2 + y^2 \leq 4\]
+\[ g_2(x,y) = x \geq 1 \]
+\begin{enumerate}
+\item Enumera las condiciones de Kuhn-Tucker para este problema.
+\item Resuelve las ecueaciones anteriores
+\item Grafica la función objetivo
+\end{enumerate}
+Planteamos el Lagrangiano para maximización con restricciones $\leq$ 0:
+\[
+\mathcal{L}(x,y,\lambda_1, \lambda_2) = 3x + 4y - \lambda_1(x^2 + y^2 - 4)-\lambda_2 (1-x) 
+\] con $\lambda_1, \lambda_2 \geq 0$.
+Las condiciones del KKT son:
+\newline
+Factibilidad primal
+\[x^2 + y^2 \leq 0, \quad 1-x\leq 0\]
+Factibilidad dual
+\[\lambda_1 \geq 0, \lambda_2\geq 0 \]
+Estacionariedad $\nabla_{x,y} \mathcal{L} = 0$
+\[\frac{\partial \mathcal{L}}{\partial x} = 3-2\lambda_1x+\lambda_2 = 0\]
+\[\frac{\partial \mathcal{L}}{\partial y} = 4 -2\lambda_1y = 0.\]
+Complementariedad
+\[\lambda_1(x^2+y^2 -4)=0\]
+\[\lambda_2(1-x)=0\]
+\subsubsection{Resolución del sistema}
+Tomamos $g_1(x,y)=x^2+y^2-4\le 0$ y $g_2(x,y)=1-x\le 0$. 
+\[
+\mathcal L(x,y,\lambda_1,\lambda_2)=3x+4y-\lambda_1(x^2+y^2-4)-\lambda_2(1-x),
+\qquad \lambda_1,\lambda_2\ge 0.
+\]
+Resolviendo el sistema:
+\[
+\frac{\partial \mathcal L}{\partial x}=3-2\lambda_1 x+\lambda_2=0,\qquad
+\frac{\partial \mathcal L}{\partial y}=4-2\lambda_1 y=0.
+\]
+De $4-2\lambda_1 y=0$ se obtiene $\lambda_1 y=2$, luego $\lambda_1>0$ y por complementariedad $x^2+y^2=4$.
+
+\emph{Caso 1:} $x>1 \Rightarrow \lambda_2=0$. Entonces
+\[
+3-2\lambda_1 x=0\Rightarrow x=\frac{3}{2\lambda_1},\qquad
+y=\frac{2}{\lambda_1}.
+\]
+Imponiendo $x^2+y^2=4$:
+\[
+\left(\frac{3}{2\lambda_1}\right)^2+\left(\frac{2}{\lambda_1}\right)^2=4
+\ \Rightarrow\ 
+\lambda_1=\frac54,
+\]
+y por tanto
+\[
+(x^*,y^*)=\left(\frac{6}{5},\frac{8}{5}\right),\qquad \lambda_2=0.
+\]
+
+\emph{Caso 2:} $x=1$. De $x^2+y^2=4$ se sigue $y=\pm\sqrt3$; pero $y=-\sqrt3$ da $\lambda_1<0$ (imposible). Con $y=\sqrt3$ se tiene $\lambda_1=\frac{2}{\sqrt3}$ y
+\[
+3-2\lambda_1(1)+\lambda_2=0 \Rightarrow \lambda_2=2\lambda_1-3=\frac{4}{\sqrt3}-3<0,
+\]
+contradicción. Por tanto no hay solución KKT con $x=1$.
+
+Concluimos que el máximo ocurre en
+\[
+(x^*,y^*)=\left(\frac{6}{5},\frac{8}{5}\right),\qquad f(x^*,y^*)=3\cdot\frac65+4\cdot\frac85=10,
+\]
+con multiplicadores $\lambda_1=\frac54$ y $\lambda_2=0$.
+
+\newpage
+\subsubsection{Gráfica}
+\begin{figure}[hbtp]
+\centering
+\includegraphics[scale=1]{../../Imágenes/Graficas/3.png}
+\end{figure}
+
+\subsection{Ejemplo 2}
+Encuentra el máximo la función $f(x,y) = 2x^2+ 3xy$ sujeta a las restricciones 
+\[
+g_1(x,y) = \frac{1}{2}x^2 + y \leq 4
+\]
+\[
+g_2(x,y) =  y \geq 2
+\]
+
+Planteamos el Lagrangiano para maximización con restricciones $\leq 0$:
+\[
+\mathcal{L}(x,y,\lambda_1, \lambda_2)
+=
+2x^2+3xy
+-\lambda_1\!\left(\frac{1}{2}x^2 + y-4\right)
+-\lambda_2 (2-y)
+\]
+con $\lambda_1, \lambda_2 \geq 0$.
+
+Las condiciones del KKT son:
+\newline
+Factibilidad primal
+\[
+\frac{1}{2}x^2 + y-4 \leq 0, \quad 2-y\leq 0
+\]
+Factibilidad dual
+\[
+\lambda_1 \geq 0, \lambda_2\geq 0
+\]
+Estacionariedad $\nabla_{x,y} \mathcal{L} = 0$
+\[
+\frac{\partial \mathcal{L}}{\partial x}
+=
+4x+3y-\lambda_1 x = 0
+\]
+\[
+\frac{\partial \mathcal{L}}{\partial y}
+=
+3x-\lambda_1+\lambda_2 = 0
+\]
+Complementariedad
+\[
+\lambda_1\!\left(\frac{1}{2}x^2+y-4\right)=0
+\]
+\[
+\lambda_2(2-y)=0
+\]
+
+\subsubsection{Resolución del sistema}
+
+Como $y\ge 2$, de la ecuación de estacionariedad en $x$ se obtiene
+\[
+x(4-\lambda_1)+3y=0,
+\]
+lo que implica $\lambda_1>0$. Por complementariedad,
+\[
+\frac{1}{2}x^2+y=4.
+\]
+
+Tomamos el caso $y>2$, de donde $\lambda_2=0$. El sistema queda
+\[
+\begin{cases}
+4x+3y-\lambda_1 x=0,\\
+3x-\lambda_1=0.
+\end{cases}
+\]
+
+De la segunda ecuación se obtiene $\lambda_1=3x$. Sustituyendo en la primera:
+\[
+4x+3y-3x^2=0.
+\]
+
+Usando la restricción activa:
+\[
+y=4-\frac{1}{2}x^2,
+\]
+se obtiene
+\[
+4x+3\left(4-\frac{1}{2}x^2\right)-3x^2=0,
+\]
+\[
+\frac{9}{2}x^2-4x-12=0.
+\]
+
+Resolviendo,
+\[
+x=\frac{4\pm\sqrt{232}}{9}.
+\]
+Tomamos la raíz positiva,
+\[
+x^*=\frac{4+\sqrt{232}}{9},
+\qquad
+y^*=4-\frac{1}{2}(x^*)^2.
+\]
+
+Por lo tanto, el máximo se alcanza en
+\[
+(x^*,y^*)=\left(\frac{4+\sqrt{232}}{9},\;4-\frac{1}{2}\left(\frac{4+\sqrt{232}}{9}\right)^2\right).
+\]
+\subsection{Gráfica}
+\includegraphics[scale=1]{../../Imágenes/Graficas/4.png} 
+\end{document}
